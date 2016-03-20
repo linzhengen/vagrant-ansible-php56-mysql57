@@ -1,0 +1,12 @@
+- hosts: vagrant
+  become: yes
+  user: vagrant
+  vars_files:
+    - vars/package.yml
+  roles:
+    - git
+    - common
+    - nginx
+    - php
+    - composer
+    - mysql

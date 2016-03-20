@@ -1,0 +1,13 @@
+- name: mysql rpm install
+  yum: name=http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm
+
+- name: mysql install
+  yum: name=mysql-community-server state=installed
+
+- name: mysqld ruuning and enabled
+  service:
+    name=mysqld
+    state=started
+    enabled=yes
+  tags: mysqld
+  sudo: yes

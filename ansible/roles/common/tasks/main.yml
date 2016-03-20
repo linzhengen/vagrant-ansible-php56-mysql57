@@ -1,0 +1,39 @@
+- name: libselinux-python install
+  yum: name=libselinux-python state=installed
+
+- name: epel add
+  yum: name={{ item }}
+  with_items:
+    - http://ftp.iij.ad.jp/pub/linux/fedora/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
+    - http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm
+    - http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
+
+- name: enabled 
+  replace: dest=/etc/yum.repos.d/{{item}} regexp="enabled *= *1" replace="enabled=0"
+  with_items:
+    - epel.repo
+    - rpmforge.repo
+    - remi.repo
+
+- name: libmcrypt install
+  yum: name=libmcrypt-devel state=installed enablerepo=epel
+
+- name: install base
+  yum: name={{ item }} state=installed
+  with_items:
+    - wget
+    - vim
+    - gcc
+    - libxml2
+    - libxml2-devel
+    - curl-devel
+    - libmcrypt-devel
+    - readline-devel
+    - libxslt-devel
+    - giflib-devel
+    - openssl
+    - openssl-devel
+    - openssh-clients
+
+- name: selinux off
+  selinux: state=disabled
