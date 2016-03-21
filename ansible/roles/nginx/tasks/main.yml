@@ -4,8 +4,25 @@
 - name: nginx install
   yum: name=nginx state=latest
 
-#- name: docroot mkdir
-#  file: dest=/var/www group=vagrant owner=vagrant recurse=yes
+- name: Create self signed certificate
+  shell: |
+    mkdir -p /etc/nginx/certs &&
+    crt_file="/etc/nginx/certs/local-ssl.crt" &&
+    key_file="/etc/nginx/certs/local-ssl.key" &&
+    crt_and_key_file="/etc/nginx/certs/local-ssl.crt_and_key" &&
+    subject="/C=JP/ST=Osaka/L=Osaka City/CN=local-ssl" &&
+    openssl req -new -newkey rsa:2048 -sha1 -x509 -nodes \
+      -set_serial 1 \
+      -days 3650 \
+      -subj "$subject" \
+      -out "$crt_file" \
+      -keyout "$key_file" &&
+    cat "$crt_file" "$key_file" >> "$crt_and_key_file" &&
+    chmod 400 "$key_file" "$crt_and_key_file"
+    creates="/etc/nginx/certs/local-ssl.crt"
+
+- name: docroot mkdir
+  file: dest=/var/wwwroot/public state=directory recurse=yes
 
 - name: default nginx conf backup
   shell: mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.bak

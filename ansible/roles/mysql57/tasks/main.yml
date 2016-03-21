@@ -1,0 +1,28 @@
+- name: mysql rpm install
+  yum: name=http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm
+
+- name: mysql install
+  yum: name=mysql-community-server state=installed
+
+#- name: MySQL-python install
+#  yum: name=MySQL-python state=installed
+
+- name: mysqld ruuning and enabled
+  service:
+    name=mysqld
+    state=started
+    enabled=yes
+  tags: mysqld
+  sudo: yes
+
+- name: save-mysql-tmp-password.sh
+  script: files/save-mysql-tmp-password.sh creates=/root/.tmp.my.cnf
+
+- name: set new password
+  script: files/change-root-password.sh creates=/root/.my.cnf
+
+- name: uninstall validate password
+  shell: mysql -e "UNINSTALL PLUGIN validate_password"
+
+- name: set blank password
+  shell: mysql -e "SET PASSWORD= ''"

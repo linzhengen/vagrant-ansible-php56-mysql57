@@ -3,10 +3,11 @@
   user: vagrant
   vars_files:
     - vars/package.yml
+    - vars/mysql.yml
   roles:
     - git
     - common
     - nginx
     - php
     - composer
-    - mysql
+    - mysql57

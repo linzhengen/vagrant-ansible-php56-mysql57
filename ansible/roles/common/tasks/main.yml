@@ -1,3 +1,6 @@
+- name: set timezone
+  command: timedatectl set-timezone Asia/Tokyo
+
 - name: libselinux-python install
   yum: name=libselinux-python state=installed
 

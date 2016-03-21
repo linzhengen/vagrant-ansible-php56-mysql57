@@ -1,9 +1,19 @@
 server {
     listen       80;
+    listen       443 ssl;
+    charset      utf-8;
     server_name  localhost;
+    server_tokens off;
+    sendfile off;
+
+    # certificate
+    ssl_certificate /etc/nginx/certs/local-ssl.crt;
+    ssl_certificate_key /etc/nginx/certs/local-ssl.key;
 
     access_log  /var/log/nginx/access.log  main;
     error_log /var/log/nginx/error.log warn;
+
+    index index.html index.php;
 
     root   /var/www;
 
@@ -13,7 +23,7 @@ server {
     }
 
     location ~ \.php$ {
-        fastcgi_pass   127.0.0.1:9000;
+        fastcgi_pass   unix:/var/run/php-fpm/php-fpm.sock;
         fastcgi_index  index.php;
         fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
         include        fastcgi_params;

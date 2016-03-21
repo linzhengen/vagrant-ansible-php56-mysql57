@@ -5,8 +5,22 @@
   yum: name={{ item }} state=present enablerepo=remi,remi-php56
   with_items: php_packages
 
-- name: php-fpm conf apache to nginx replace
-  replace: dest=/etc/php-fpm.d/www.conf regexp='apache' replace='nginx' backup=yes
+- name: Disable default php-fpm.d
+  command: mv /etc/php-fpm.d/www.conf /etc/php-fpm.d/www.disabled creates=/etc/php-fpm.d/www.disabled
+
+- name: Disable default php.ini
+  command: mv /etc/php.ini /etc/php.ini.disabled creates=/etc/php.ini.disabled
+
+- name: Copy php.ini configuration
+  template: src=php.ini.j2 dest=/etc/php.ini
+  notify: php-fpm restart
+
+- name: Copy php-fpm configuration
+  template: src=www.conf.j2 dest=/etc/php-fpm.d/www.conf
+  notify: php-fpm restart
+
+#- name: php-fpm conf apache to nginx replace
+#  replace: dest=/etc/php-fpm.d/www.conf regexp='apache' replace='nginx' backup=yes
 
 - name: start php-fpm
   service: name=php-fpm state=started enabled=yes
