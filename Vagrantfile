@@ -2,6 +2,16 @@
 # vi: set ft=ruby :
 
 Vagrant.configure(2) do |config|
+  config.vm.provider :virtualbox do |v|
+      v.name = "vagrant"
+      v.customize [
+          "modifyvm", :id,
+          "--name", "default",
+          "--memory", 1024,
+          "--natdnshostresolver1", "on",
+          "--cpus", 1,
+      ]
+  end
 
   # select  box
   config.vm.box = "rafacas/centos71-plain"
