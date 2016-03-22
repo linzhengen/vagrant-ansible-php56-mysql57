@@ -1,1 +1,3 @@
-root_db_password:
+dbname: vagrant
+dbuser: vagrant
+upassword: vagrant

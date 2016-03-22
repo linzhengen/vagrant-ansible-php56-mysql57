@@ -4,8 +4,12 @@
 - name: mysql install
   yum: name=mysql-community-server state=installed
 
-#- name: MySQL-python install
-#  yum: name=MySQL-python state=installed
+- name: MySQL-python install
+  yum: name=MySQL-python state=installed
+
+- name: Copy configuration
+  template: src=my.cnf.j2 dest=/etc/my.cnf backup=yes
+  notify: mysqld restart
 
 - name: mysqld ruuning and enabled
   service:
@@ -17,12 +21,16 @@
 
 - name: save-mysql-tmp-password.sh
   script: files/save-mysql-tmp-password.sh creates=/root/.tmp.my.cnf
+  notify: mysqld restart
 
 - name: set new password
   script: files/change-root-password.sh creates=/root/.my.cnf
+  notify: mysqld restart
 
 - name: uninstall validate password
   shell: mysql -e "UNINSTALL PLUGIN validate_password"
+  notify: mysqld restart
 
 - name: set blank password
   shell: mysql -e "SET PASSWORD= ''"
+  notify: mysqld restart

@@ -4,5 +4,5 @@
 - name: move composer.phar to composer
   command: mv /usr/bin/composer.phar /usr/bin/composer
 
-- name: laravel install global
-  shell: composer global require "laravel/installer=~1.1"
+#- name: laravel install global
+#  shell: composer global require "laravel/installer=~1.1"

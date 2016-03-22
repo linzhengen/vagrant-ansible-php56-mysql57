@@ -4,5 +4,5 @@ umask 0077
 cat > /root/.my.cnf <<EOF
 [client]
 user=root
-password=$new_pass
+password='$new_pass'
 EOF

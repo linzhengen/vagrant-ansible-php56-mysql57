@@ -5,6 +5,6 @@ umask 0077
 cat > $tmp_file <<EOF
 [client]
 user=root
-password=$tmp_pass
+password='$tmp_pass'
 connect-expired-password
 EOF
