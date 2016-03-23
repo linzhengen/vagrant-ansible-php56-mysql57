@@ -1,6 +1,20 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+Vagrant.require_version ">= 1.5"
+
+# Check to determine whether we're on a windows or linux/os-x host,
+def which(cmd)
+    exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
+    ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
+        exts.each { |ext|
+            exe = File.join(path, "#{cmd}#{ext}")
+            return exe if File.executable? exe
+        }
+    end
+    return nil
+end
+
 Vagrant.configure(2) do |config|
 
   # select  box
@@ -21,9 +35,14 @@ Vagrant.configure(2) do |config|
   # disable update ssh key pair
   config.ssh.insert_key = false
 
-  config.vm.provision :ansible do |ansible|
-    ansible.limit = "all"
-    ansible.inventory_path = "hosts"
-    ansible.playbook = "ansible/playbook.yml"
+  if which('ansible-playbook')
+    config.vm.provision :ansible do |ansible|
+      ansible.limit = "all"
+      ansible.inventory_path = "hosts"
+      ansible.playbook = "ansible/playbook.yml"
+    end
+  else
+      config.vm.provision :shell, path: "ansible/windows.sh", args: ["vagrant"]
   end
+
 end
