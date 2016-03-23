@@ -6,3 +6,4 @@ cat > /root/.my.cnf <<EOF
 user=root
 password='$new_pass'
 EOF
+mysql -uroot -e "GRANT ALL PRIVILEGES ON *.* TO 'vagrant'@'192.168.%' IDENTIFIED BY 'vagrant' "
