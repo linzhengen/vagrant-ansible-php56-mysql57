@@ -37,6 +37,7 @@
     - openssl
     - openssl-devel
     - openssh-clients
+    - crontabs
 
 - name: selinux off
   selinux: state=disabled
