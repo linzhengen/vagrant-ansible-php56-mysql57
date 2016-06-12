@@ -21,7 +21,9 @@ Vagrant.configure(2) do |config|
 
   # sync folder
   config.vm.synced_folder "../","/var/wwwroot",
-                          type: 'nfs'
+    :owner => "nginx",
+    :group => "nginx",
+    :mount_options => ["dmode=775,fmode=664"]
 
   # set private network ip
   config.vm.define :private_node do |node|
