@@ -24,8 +24,8 @@
 - name: docroot mkdir
   file: dest=/var/wwwroot/public state=directory recurse=yes
 
-- name: default nginx conf backup
-  shell: mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.bak
+#- name: default nginx conf backup
+#  shell: mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.bak
 
 - name: nginx conf
   template: src=nginx.conf.j2 dest=/etc/nginx/conf.d/nginx.conf owner=nginx group=nginx
